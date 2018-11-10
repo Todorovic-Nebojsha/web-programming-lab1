@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import StudentItem from "./StudentItem";
 import ReactPaginate from 'react-paginate';
 import "../style.css";
+import "./Pagination.css"
 class StudentsList extends Component{
     constructor(props){
         super(props);
@@ -25,10 +26,9 @@ class StudentsList extends Component{
                 {items}
             </ul>
                 <ReactPaginate
-
                     previousLabel={"previous"}
                     nextLabel={"next"}
-                    breakLabel={<a href="/#">...</a>}
+                    breakLabel={<a href="#">...</a>}
                     breakClassName={"break-me"}
                     pageCount={pageCount}
                     marginPagesDisplayed={2}
@@ -36,8 +36,7 @@ class StudentsList extends Component{
                     onPageChange={this.handlePageClick}
                     containerClassName={"pagination"}
                     subContainerClassName={"pages pagination"}
-                    activeClassName={"active"}
-                />
+                    activeClassName={"active"}/>
 
             </div>
         );

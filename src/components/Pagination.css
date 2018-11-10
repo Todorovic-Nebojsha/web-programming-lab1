@@ -1,0 +1,49 @@
+/*
+    Styles for the Pagination
+*/
+
+.pagination {
+    display:block;
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+.pagination li {
+    display:inline-block;
+}
+.pagination li a {
+    display:block;
+    margin:0px 10px 10px 0px;
+    text-transform:capitalize;
+    padding:10px 20px;
+    border:1px solid #ddd;
+    background:#fff;
+    border-radius:5px;
+    cursor:pointer;
+    font-family:'Roboto', sans-serif;
+    font-weight:500;
+    font-size:14px;
+    color:#555;
+}
+.pagination li a:hover,
+.pagination li a:focus {
+    text-decoration:none;
+    cursor:pointer;
+    background:#465362;
+    color:#fff;
+    box-shadow:rgba(0,0,0,0.1) 0px 5px 25px;
+}
+.pagination li a:focus,
+.pagination li a:active {
+    outline:none;
+}
+.pagination li.active a {
+    color:#fff;
+    background:#ED254E;
+}
+.pagination li.disabled a {
+    color:#fff;
+    background:#465362;
+    opacity:0.25;
+    cursor:default;
+}
