@@ -35,12 +35,12 @@ class EditStudentDetails extends Component{
         e.target.reset();
         this.props.updateStudent(s);
 
-    }
+    };
     onFormCancel=(e)=>{
         e.preventDefault();
         e.target.reset();
         this.props.cancelUpdate();
-    }
+    };
 
     render(){
         return(

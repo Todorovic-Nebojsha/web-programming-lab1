@@ -3,9 +3,11 @@ import logo from './logo.svg';
 import './App.css';
 import StudentsList from "./components/StudentsList";
 import StudentItem from "./components/StudentItem";
+import CreateNewStudent from"./components/CreateNewStudent"
 import {listStudents}  from "./repository/studentRepository";
 import EditStudentDetails from "./components/EditStudentDetails";
-import "./style.css"
+import "./style.css";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 
 class App extends Component {
@@ -13,7 +15,7 @@ class App extends Component {
     super(props);
     let Students=listStudents();
     //console.log(Students.length)
-    this.state={students:Students,studentSelected:null};
+    this.state={students:Students,studentSelected:null,createNew:null};
   }
 
 
@@ -50,13 +52,13 @@ class App extends Component {
         //console.log(e);
         this.setState((oldState,props)=>{
             let studentList=[...oldState.students];
-            console.log(studentList)
+            console.log(studentList);
             let studentIndeks = studentList
                 .findIndex((obj)=>
-                    obj.name==e.name&&
-                    obj.surename==e.surename&&
-                    obj.indeks==e.indeks&&
-                    obj.nasoka==e.nasoka
+                    obj.name===e.name&&
+                    obj.surename===e.surename&&
+                    obj.indeks===e.indeks&&
+                    obj.nasoka===e.nasoka
                 );
             studentList.splice(studentIndeks,1);
             return{
@@ -70,7 +72,32 @@ class App extends Component {
                studentSelected:null
            }
         });
-    }
+    };
+    addNewStudent=(e)=>{
+      this.setState((oldState,props)=>{
+          return{
+              students:[e,...oldState.students],
+              createNew:null
+          }
+      })
+    };
+    cancelAddNew=(e)=>
+    {
+        this.setState((state,props)=>{
+            return{
+                createNew:null
+            }
+        });
+    };
+
+    openCreateNew=(e)=>{
+        console.log("openCreateNew");
+        this.setState((state,props)=>{
+            return{
+                createNew:true
+            }
+        });
+    };
   render() {
     return (
         <div className="leftMargin">
@@ -81,6 +108,15 @@ class App extends Component {
             <EditStudentDetails  updateStudent={this.updateStudent}
                                  cancelUpdate={this.cancelUpdate}
                                  student={this.state.studentSelected}/> }
+           <button onClick={()=>this.openCreateNew()}> Create new Student</button>
+            {this.state.createNew &&
+            <CreateNewStudent
+                addNewStudent={this.addNewStudent}
+                cancelAddNew={this.cancelAddNew}/>
+            }
+
+
+
         </div>
     );
   }
