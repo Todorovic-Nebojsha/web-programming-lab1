@@ -42,7 +42,7 @@ class StudentsList extends Component{
         );
    }
    getStudentsPage=(offset,nextPageOffset)=>{
-      return this.props.students.map((s,index)=>
+       return this.props.students.map((s,index)=>
           <StudentItem
               deleteStudent={this.props.deleteStudent}
               studentClicked={this.props.studentClicked}

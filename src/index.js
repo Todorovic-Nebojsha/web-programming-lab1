@@ -6,7 +6,8 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import StudentsList from './components/StudentsList'
 import StudentItem from './components/StudentItem'
-
+import { BrowserRouter , Route, Link } from "react-router-dom";
+import CreateNewStudent from "./components/CreateNewStudent";
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

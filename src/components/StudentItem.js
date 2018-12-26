@@ -21,7 +21,7 @@ class StudentItem extends Component{
             <div>
             <li onClick={()=>this.props.studentClicked(this.cloneStudent(this.props.student))}
                 className="d-inline-block">
-             {this.props.student.name} {this.props.student.surename}
+             {this.props.student.name} {this.props.student.lastName}
             </li>
                 &nbsp;&nbsp;
                 <button className="alert-danger"
