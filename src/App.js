@@ -9,7 +9,9 @@ import EditStudentDetails from "./components/EditStudentDetails";
 import "./style.css";
 import {getAllStudents,deleteStudent,getStudentByIndex,updateStudentApi,createNewStudentApi} from "./repository/studentApi"
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import {getStudyPrograms}  from "./repository/studyProgramApi"
+import {getStudyPrograms,deleteStudyProgramApi,createNewStudyProgramApi}  from "./repository/studyProgramApi"
+import StudyProgramList from "./components/StudyProgramList";
+import CreateNewStudyProgram from "./components/CreateNewStudyProgram";
 
 
 class App extends Component {
@@ -17,22 +19,39 @@ class App extends Component {
     super(props);
     let Students=listStudents();
     //console.log(Students.length)
-    this.state={students:[],studentSelected:null,createNew:null,studyPrograms:[]};
+    this.state={students:[],studentSelected:null,createNew:null,
+        studyPrograms:[],showStudentList:false,showStudyPrograms:false,
+        createNewStudyProgram:null
+    };
   }
 
   componentDidMount(){
       this.loadStudents();
+      this.loadStudyPrograms();
   }
   loadStudents=()=>{
       getAllStudents()
           .then((data)=>{
-          console.log('data: ',data);
+          //console.log('data: ',data);
               this.setState({students:data})
           });
   };
 
-  studentClicked=(e)=>{
+  loadStudyPrograms=()=>{
       getStudyPrograms().then(data=>this.setState({studyPrograms:data}));
+  };
+
+    deleteStudyProgram=(e)=>{
+        deleteStudyProgramApi(e.id).then(response=> {
+            this.loadStudyPrograms();
+            if (!response.ok)
+                alert("study program has students and cannot be deleted!")
+
+        })
+    };
+
+  studentClicked=(e)=>{
+      this.loadStudyPrograms();
       console.log("APP JS"+e.name);
       getStudentByIndex(e.index).then(response=>response.json()).then(data=>
           this.setState((prevState, props) => ({
@@ -90,6 +109,7 @@ class App extends Component {
 
 
     };
+
     cancelUpdate=(e)=>{
         this.setState((state,props)=>{
            return{
@@ -98,16 +118,21 @@ class App extends Component {
         });
     };
     addNewStudent=(e)=>{
-        createNewStudentApi(e).then(response=>
-                this.loadStudents(),
-            this.setState({createNew:null})
-        );
+        createNewStudentApi(e).then(response=> {
+            this.loadStudents();
+                this.setState({createNew: null});
+            if (!response.ok)
+                alert("student already exists or you have entered invalid parametars")
+        });
       // this.setState((oldState,props)=>{
       //     return{
       //         students:[e,...oldState.students],
       //         createNew:null
       //     }
       // })
+    };
+    addNewStudyProgram=(e)=>{
+        createNewStudyProgramApi(e).then(response=>this.loadStudyPrograms(),this.setState({createNewStudyProgram:null}));
     };
     cancelAddNew=(e)=>
     {
@@ -117,9 +142,15 @@ class App extends Component {
             }
         });
     };
-
+    cancelAddNewStudyProgram=(e)=>{
+        this.setState((state,props)=>{
+            return{
+                createNewStudyProgram:null
+            }
+        });
+    };
     openCreateNew=(e)=>{
-        getStudyPrograms().then(data=>this.setState({studyPrograms:data}));
+        this.loadStudyPrograms();
         console.log("openCreateNew");
         this.setState((state,props)=>{
             return{
@@ -127,8 +158,34 @@ class App extends Component {
             }
         });
     };
+    openCreateNewStudyProgram=(e)=>{
+        console.log("openCreateNew");
+        this.setState((state,props)=>{
+            return{
+                createNewStudyProgram:true
+            }
+        });
+    };
+    toggleStudentList=()=>{
+      this.setState((state,props)=>{
+          return {showStudentList:!state.showStudentList}
+      });
+    };
+    toggleStudyPrograms=()=>
+    {
+        this.setState((state,props)=>{
+            return {showStudyPrograms:!state.showStudyPrograms}
+        });
+    };
   render() {
     return (
+
+        <div>
+            <button onClick={()=>this.toggleStudentList()}>Show/Hide Student List</button> <br/>
+            <button onClick={()=>this.toggleStudyPrograms()}>Show/Hide Study Program List</button>
+
+            {/*student Options*/}
+        {this.state.showStudentList &&
         <div className="leftMargin">
         <StudentsList students={this.state.students}
                       deleteStudent={this.deleteStudent}
@@ -147,9 +204,27 @@ class App extends Component {
                 studyPrograms={this.state.studyPrograms}
             />
             }
+        </div>
+        }
+        {/*study program options*/}
 
 
+            {this.state.showStudyPrograms &&
+                <div className="leftMargin">
+                    <StudyProgramList studyPrograms={this.state.studyPrograms}
+                                      deleteStudyProgram={this.deleteStudyProgram}
+                    />
+                    <button onClick={()=>this.openCreateNewStudyProgram()}> Create new Study Program</button>
+                    {this.state.createNewStudyProgram &&
+                    <CreateNewStudyProgram
+                        addNewStudyProgram={this.addNewStudyProgram}
+                        cancelAddNew={this.cancelAddNewStudyProgram}
 
+                    />
+                    }
+                </div>
+
+            }
         </div>
     );
   }

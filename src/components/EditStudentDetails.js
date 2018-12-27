@@ -42,7 +42,8 @@ class EditStudentDetails extends Component{
     };
 
     render(){
-        let studyPrograms=this.props.studyPrograms.map((i)=><option value={i.name}>{i.name}</option>);
+        let studyPrograms=this.props.studyPrograms.map((i)=><option value={i.name}
+        selected={i.name==this.props.student.studyProgram.name}>{i.name}</option>);
         return(
 
             <form onSubmit={this.onFormSubmit}>
